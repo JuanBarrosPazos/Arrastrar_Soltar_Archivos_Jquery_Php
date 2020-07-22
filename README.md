@@ -18,8 +18,8 @@ Arrastrar Soltar Archivos Jquery Php Dropzone
 ----
 
 * Partiendo de la configuración inicial en js/dropzone.js:
-accept:
 <br>
+accept:
  function(file, done) {
             return done();
           },
