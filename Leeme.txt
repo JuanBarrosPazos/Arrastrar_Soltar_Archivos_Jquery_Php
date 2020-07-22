@@ -1,0 +1,133 @@
+
+Version: Dropzone Validate Client Server Full  01  Auto Reduction Img
+
+Esta version tiene una validación:
+
+A). En cliente, por medio de js/dropzone.js:
+
+1º. Tipo de archivo L.155: acceptedFiles: ".jpeg,.jpg,.png,.gif,.mkv,.avi,.mp4,.pdf,.doc,.docx",
+
+2º. Tipo de imágen L.201: ext_img = new Array(".jpg", ".png", "jpeg");
+
+3º. Tamaño de imágen L.217: if (file.size > (1000 * 1024)){.....
+
+4º. Ancho y Alto de la imagen L227 / 239: var reader = new FileReader();
+                                          reader.onload = (function (file) {......
+
+5º. Tipo de archivo L.205: ext_doc = new Array(".pdf", ".doc", "docx");
+
+6º. Tamaño de archivo L.251: else if (ext_doc.includes(extd)) {......
+
+7º. Tipo de archivo de video: L.209: ext_vid = new Array(".mkv", ".mp4", "avi");
+
+8º. Tamaño de archivo de video L.258: else if (ext_vid.includes(extv)) {.....
+
+///////////////////////////////
+
+B). Del lado del servidor por medio de file_upload.php:
+
+9º. Tipo de archivo L.13/14: $ext_file = array('.jpg','.png','jpeg','.avi','.mkv','.mp4','.pdf');
+      			     $ext_file = in_array($extension, $ext_file);
+
+10º. L.16: if ($ext_file) {.....
+
+///////////////////////////////
+
+C). La validación del lado cliente se basa en:
+
+1º. Partiendo de la configuración inicial:
+	You'd use the accept option like this:
+      	This is an original option:
+
+          accept: function(file, done) {
+            return done();
+          },
+          init: function() {
+            return noop;
+          },
+
+2º. Realizamos la siguientes modificaciones:
+
+     accept: function(file, done) {
+
+      ext_img = new Array(".jpg", ".png", "jpeg");
+      var namei = file.name;
+      var exti = (namei.substring(namei.lastIndexOf("."))).toLowerCase();
+      
+      ext_doc = new Array(".pdf", ".doc", "docx");
+      var named = file.name;
+      var extd = (named.substring(named.lastIndexOf("."))).toLowerCase();
+
+      ext_vid = new Array(".mkv", ".mp4", "avi");
+      var namev = file.name;
+      var extv = (namev.substring(namev.lastIndexOf("."))).toLowerCase();
+      
+      var sizemb = Number(file.size / 1024000).toFixed(2);
+
+      if (ext_img.includes(exti)) {
+          // ERROR SI LA IMG > DE 1 MEGA
+          if (file.size > (1000 * 1024)){
+                  return done ('IMAGEN: '+file.name+' SIZE: '+sizemb+' > 1MB');
+            }else{
+                        
+              /*  VALIDO EL ANCHO Y ALTO DE LA IMAGEN 
+                  REALIZO UNA AUTO REDUCCION EN file_upload.php
+                  PARA ALTO ANCHO MAX 900
+              
+                  AQUI LIMITO EL ANCHO ALTO A > 3000 px
+              */
+              var reader = new FileReader();
+              reader.onload = (function (file) {
+                  var image = new Image();
+                  image.src = file.target.result;
+                  image.onload = function () {
+                      var ancho = this.width;
+                      var alto = this.height;
+                      if (ancho > 900) { return done("Ancho "+ancho+" > 900 px"); } 
+                      else if (alto > 900) { return done("Alto "+alto+" > 900 px"); }
+                      else {return done();}
+                  };
+              });
+              reader.readAsDataURL(file);
+              // FIN VALIDO EL ANCHO Y ALTO DE LA IMAGEN
+              
+              /* SI VALIDO SOLAMENTE EL SIZE, Y NO EL ANCHO Y ALTO.
+                 RETURN OK Y UPLOAD IMAGE
+
+                return done(); 
+              */
+
+            } // FIN CONDICIONAL SE VALIDA EL SIZE
+            } // FIN SI ES IMAGEN
+
+      else if (ext_doc.includes(extd)) {
+          // ERROR SI EL DOCUMENTO > DE 2 MEGA
+          if (file.size > (2000 * 1024)){
+                  return done ('DOC: '+file.name+' SIZE: '+sizemb+' > 2MB');
+                      }else{ return done(); }
+            } // FIN SI ES DOC
+
+      else if (ext_vid.includes(extv)) {
+          // ERROR SI EL VIDEO > DE 50 MEGA
+          if (file.size > (60000 * 1024)){
+                  return done ('VIDEO: '+file.name+' SIZE: '+sizemb+' > 60MB');
+                      }else{ return done(); }
+            } // FIN SI ES DOC
+
+      else {
+              return done ('TIPO DE ARCHIVO NO PERMITIDO '+file.name);
+            }
+    }, // FIN accept: function(....
+
+    init: function() {
+      return noop;
+    },
+
+///////////////////////////////
+
+	Gracias por vuestra atención
+
+///////////////////////////////
+
+
+
