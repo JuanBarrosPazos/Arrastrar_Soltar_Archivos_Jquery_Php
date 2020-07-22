@@ -26,6 +26,7 @@ accept:
 init: function() {
             return noop;
           },
+<br>
 * He integrado alguna validación muy fácil de modificar y que nos retorna los errores en pantalla sin problema.
 También tememos una pequeña validación en file_upload.php para el file type:
 <br>
