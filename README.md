@@ -5,26 +5,26 @@ Arrastrar Soltar Archivos Jquery Php Dropzone
 
 ## En el directorio Otras_Versiones encontraremos:
 
-* Arrastrar Soltar Archivos Jquery Php 04 Ok Validate.zip 2020.05.12
+1 Arrastrar Soltar Archivos Jquery Php 04 Ok Validate.zip 2020.05.12
 - Esta versión sólo valida del lado cliente:
 
-* Arrastrar Soltar Archivos Jquery Php 05 Ok Validate Reduccion Img.zip 2020.05.12
+2 Arrastrar Soltar Archivos Jquery Php 05 Ok Validate Reduccion Img.zip 2020.05.12
 - Esta versión valida del lado cliente y servidor. Además redimensiona las imágenes en el servidor, si superan un limite de alto o ancho.
 
-* Dos nuevas versiones con validación del lado cliente del ancho y alto de la imágen:
+3 Dos nuevas versiones con validación del lado cliente del ancho y alto de la imágen:
 - Dropzone Validate Client Full 01.zip 2020.05.14
 - Dropzone Validate Client Server Full 01 Auto Reduction Img.zip 2020.05.14 (versión github)
 
 ----
 
-Partiendo de la configuración inicial en js/dropzone.js:
+* Partiendo de la configuración inicial en js/dropzone.js:
 accept: function(file, done) {
             return done();
           },
 init: function() {
             return noop;
           },
-He integrado alguna validación muy fácil de modificar y que nos retorna los errores en pantalla sin problema.
+* He integrado alguna validación muy fácil de modificar y que nos retorna los errores en pantalla sin problema.
 También tememos una pequeña validación en file_upload.php para el file type:
      accept: function(file, done) {
       ext_img = new Array(".jpg", ".png", "jpeg");
@@ -86,4 +86,5 @@ También tememos una pequeña validación en file_upload.php para el file type:
     init: function() {
       return noop;
     },
+<br>
 Espero que os sea útil.
