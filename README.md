@@ -18,7 +18,9 @@ Arrastrar Soltar Archivos Jquery Php Dropzone
 ----
 
 * Partiendo de la configuración inicial en js/dropzone.js:
-accept: function(file, done) {
+accept:
+<br>
+ function(file, done) {
             return done();
           },
 init: function() {
@@ -26,6 +28,7 @@ init: function() {
           },
 * He integrado alguna validación muy fácil de modificar y que nos retorna los errores en pantalla sin problema.
 También tememos una pequeña validación en file_upload.php para el file type:
+<br>
      accept: function(file, done) {
       ext_img = new Array(".jpg", ".png", "jpeg");
       var namei = file.name;
